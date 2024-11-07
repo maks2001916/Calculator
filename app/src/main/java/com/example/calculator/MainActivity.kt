@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -87,8 +88,12 @@ class MainActivity : AppCompatActivity() {
                             val num2 = secondPart.toInt()
                             if (num2 == 0) {
                                 resultTV.text = "Ошибка: деление на ноль"
+                            } else if (firstPart.isEmpty() ||
+                                secondPart.isEmpty()) {
+                                resultTV.text = "Ошибка: некоректное выражение"
                             } else {
                                 resultTV.text = (num1 / num2).toString()
+
                             }
                         } catch (e: NumberFormatException) {
                             resultTV.text = "Ошибка: неверный формат числа"
@@ -100,7 +105,12 @@ class MainActivity : AppCompatActivity() {
                         try {
                             val num1 = firstPart.toInt()
                             val num2 = secondPart.toInt()
-                            resultTV.text = (num1 * num2).toString()
+                            if (firstPart.isEmpty() ||
+                                secondPart.isEmpty()) {
+                                resultTV.text = "Ошибка: некоректное выражение"
+                            } else {
+                                resultTV.text = (num1 * num2).toString()
+                            }
                         } catch (e: NumberFormatException) {
                             resultTV.text = "Ошибка: неверный формат числа"
                         }
@@ -111,7 +121,12 @@ class MainActivity : AppCompatActivity() {
                         try {
                             val num1 = firstPart.toInt()
                             val num2 = secondPart.toInt()
-                            resultTV.text = (num1 + num2).toString()
+                            if (firstPart.isEmpty() ||
+                                secondPart.isEmpty()) {
+                                resultTV.text = "Ошибка: некоректное выражение"
+                            } else {
+                                resultTV.text = (num1 + num2).toString()
+                            }
                         } catch (e: NumberFormatException) {
                             resultTV.text = "Ошибка: неверный формат числа"
                         }
@@ -122,7 +137,12 @@ class MainActivity : AppCompatActivity() {
                         try {
                             val num1 = firstPart.toInt()
                             val num2 = secondPart.toInt()
-                            resultTV.text = (num1 - num2).toString()
+                            if (firstPart.isEmpty() ||
+                                secondPart.isEmpty()) {
+                                resultTV.text = "Ошибка: некоректное выражение"
+                            } else {
+                                resultTV.text = (num1 - num2).toString()
+                            }
                         } catch (e: NumberFormatException) {
                             resultTV.text = "Ошибка: неверный формат числа"
                         }
@@ -149,26 +169,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun checkingForAnExample(string: String) : Boolean {
-        val regex = Regex("^[0-9]+[*/+-][0-9]+[ =]$")
+        val regex = Regex("^[0-9]+[*/\\+\\-][0-9]+[ =]$")
+
         if (string.matches(regex)) return true
         return false
     }
 
     fun getFirstPart(input: String): String {
         // Регулярное выражение для поиска части строки до первого символа (*, /, +, -)
-        val regex = Regex("^(.*?)([*+/+-])")
+        val regex = Regex("^(.*?)([*/\\+\\-])")
+        messeg(regex.matchEntire(input)?.groups?.get(1)?.value?.trim() ?: "")
         return regex.matchEntire(input)?.groups?.get(1)?.value?.trim() ?: ""
     }
 
     fun getSecondPart(input: String): String {
         // Регулярное выражение для поиска части строки от символа (*, /, +, -) до символа (=)
-        val regex = Regex("([*+/+-])(.*?)(=)")
+        val regex = Regex("([*/\\+\\-])(.*?)(=)")
+        messeg(regex.matchEntire(input)?.groups?.get(2)?.value?.trim() ?: "")
         return regex.matchEntire(input)?.groups?.get(2)?.value?.trim() ?: ""
     }
 
     fun getOperator(input: String): String {
         // Регулярное выражение для поиска оператора между числами
-        val regex = Regex("([*+/+-])")
+        val regex = Regex("([*/\\+\\-])")
+        messeg(regex.find(input)?.value ?: "")
         return regex.find(input)?.value ?: ""
+    }
+
+    fun messeg(string: String) {
+        Toast.makeText(
+            applicationContext,
+            "${getString(R.string.string)}",
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
