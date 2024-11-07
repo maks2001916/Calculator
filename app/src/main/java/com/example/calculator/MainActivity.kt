@@ -1,5 +1,6 @@
 package com.example.calculator
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var equBTN: Button
     private lateinit var resBTN: Button
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -77,10 +79,57 @@ class MainActivity : AppCompatActivity() {
             setFigure("=")
             if (checkingForAnExample(inputET.text.toString())) {
                 when (getOperator(inputET.text.toString())) {
-                    "/" -> resultTV.setText(getFirstPart(inputET.text.toString()).toInt() / getSecondPart(inputET.text.toString()).toInt())
-                    "*" -> resultTV.setText(getFirstPart(inputET.text.toString()).toInt() * getSecondPart(inputET.text.toString()).toInt())
-                    "+" -> resultTV.setText(getFirstPart(inputET.text.toString()).toInt() + getSecondPart(inputET.text.toString()).toInt())
-                    "-" -> resultTV.setText(getFirstPart(inputET.text.toString()).toInt() - getSecondPart(inputET.text.toString()).toInt())
+                    "/" -> {
+                        val firstPart = getFirstPart(inputET.text.toString())
+                        val secondPart = getSecondPart(inputET.text.toString())
+                        try {
+                            val num1 = firstPart.toInt()
+                            val num2 = secondPart.toInt()
+                            if (num2 == 0) {
+                                resultTV.text = "Ошибка: деление на ноль"
+                            } else {
+                                resultTV.text = (num1 / num2).toString()
+                            }
+                        } catch (e: NumberFormatException) {
+                            resultTV.text = "Ошибка: неверный формат числа"
+                        }
+                    }
+                    "*" -> {
+                        val firstPart = getFirstPart(inputET.text.toString())
+                        val secondPart = getSecondPart(inputET.text.toString())
+                        try {
+                            val num1 = firstPart.toInt()
+                            val num2 = secondPart.toInt()
+                            resultTV.text = (num1 * num2).toString()
+                        } catch (e: NumberFormatException) {
+                            resultTV.text = "Ошибка: неверный формат числа"
+                        }
+                    }
+                    "+" -> {
+                        val firstPart = getFirstPart(inputET.text.toString())
+                        val secondPart = getSecondPart(inputET.text.toString())
+                        try {
+                            val num1 = firstPart.toInt()
+                            val num2 = secondPart.toInt()
+                            resultTV.text = (num1 + num2).toString()
+                        } catch (e: NumberFormatException) {
+                            resultTV.text = "Ошибка: неверный формат числа"
+                        }
+                    }
+                    "-" -> {
+                        val firstPart = getFirstPart(inputET.text.toString())
+                        val secondPart = getSecondPart(inputET.text.toString())
+                        try {
+                            val num1 = firstPart.toInt()
+                            val num2 = secondPart.toInt()
+                            resultTV.text = (num1 - num2).toString()
+                        } catch (e: NumberFormatException) {
+                            resultTV.text = "Ошибка: неверный формат числа"
+                        }
+                    }
+                    else -> {
+                        resultTV.text = "Ошибка: неверный оператор"
+                    }
                 }
             }
         }
@@ -92,6 +141,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     fun setFigure(figure: String) {
         //var text = inputET.text.toString()
         //inputET.text.clear()
