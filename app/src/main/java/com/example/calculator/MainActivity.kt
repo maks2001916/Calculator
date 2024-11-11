@@ -2,6 +2,7 @@ package com.example.calculator
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Button
 import android.widget.EditText
 import android.widget.GridLayout
@@ -61,6 +62,10 @@ class MainActivity : AppCompatActivity() {
         equBTN = findViewById(R.id.equBTN)
         resBTN = findViewById(R.id.resBTN)
 
+        setSupportActionBar(toolbarTB)
+        toolbarTB.setNavigationIcon(R.drawable.exit_fill)
+
+
         oneBTN.setOnClickListener { setFigure("1") }
         twoBTN.setOnClickListener { setFigure("2") }
         threeBTN.setOnClickListener { setFigure("3") }
@@ -79,86 +84,46 @@ class MainActivity : AppCompatActivity() {
         equBTN.setOnClickListener {
             setFigure("=")
             if (checkingForAnExample(inputET.text.toString())) {
-                when (getOperator(inputET.text.toString())) {
-                    "/" -> {
-                        val firstPart = getFirstPart(inputET.text.toString())
-                        val secondPart = getSecondPart(inputET.text.toString())
-                        try {
-                            val num1 = firstPart.toInt()
-                            val num2 = secondPart.toInt()
+                val firstPart = getFirstPart(inputET.text.toString())
+                val secondPart = getSecondPart(inputET.text.toString())
+                if (firstPart.isEmpty() || secondPart.isEmpty()) {
+                    resultTV.text = "Ошибка: некорректное выражение"
+                    return@setOnClickListener
+                }
+                val operator = getOperator(inputET.text.toString())
+                try {
+                    val num1 = firstPart.toInt()
+                    val num2 = secondPart.toInt()
+                    when (operator) {
+                        "/" -> {
                             if (num2 == 0) {
                                 resultTV.text = "Ошибка: деление на ноль"
-                            } else if (firstPart.isEmpty() ||
-                                secondPart.isEmpty()) {
-                                resultTV.text = "Ошибка: некоректное выражение"
                             } else {
                                 resultTV.text = (num1 / num2).toString()
-
                             }
-                        } catch (e: NumberFormatException) {
-                            resultTV.text = "Ошибка: неверный формат числа"
                         }
+                        "*" -> resultTV.text = (num1 * num2).toString()
+                        "+" -> resultTV.text = (num1 + num2).toString()
+                        "-" -> resultTV.text = (num1 - num2).toString()
+                        else -> resultTV.text = "Ошибка: неверный оператор"
                     }
-                    "*" -> {
-                        val firstPart = getFirstPart(inputET.text.toString())
-                        val secondPart = getSecondPart(inputET.text.toString())
-                        try {
-                            val num1 = firstPart.toInt()
-                            val num2 = secondPart.toInt()
-                            if (firstPart.isEmpty() ||
-                                secondPart.isEmpty()) {
-                                resultTV.text = "Ошибка: некоректное выражение"
-                            } else {
-                                resultTV.text = (num1 * num2).toString()
-                            }
-                        } catch (e: NumberFormatException) {
-                            resultTV.text = "Ошибка: неверный формат числа"
-                        }
-                    }
-                    "+" -> {
-                        val firstPart = getFirstPart(inputET.text.toString())
-                        val secondPart = getSecondPart(inputET.text.toString())
-                        try {
-                            val num1 = firstPart.toInt()
-                            val num2 = secondPart.toInt()
-                            if (firstPart.isEmpty() ||
-                                secondPart.isEmpty()) {
-                                resultTV.text = "Ошибка: некоректное выражение"
-                            } else {
-                                resultTV.text = (num1 + num2).toString()
-                            }
-                        } catch (e: NumberFormatException) {
-                            resultTV.text = "Ошибка: неверный формат числа"
-                        }
-                    }
-                    "-" -> {
-                        val firstPart = getFirstPart(inputET.text.toString())
-                        val secondPart = getSecondPart(inputET.text.toString())
-                        try {
-                            val num1 = firstPart.toInt()
-                            val num2 = secondPart.toInt()
-                            if (firstPart.isEmpty() ||
-                                secondPart.isEmpty()) {
-                                resultTV.text = "Ошибка: некоректное выражение"
-                            } else {
-                                resultTV.text = (num1 - num2).toString()
-                            }
-                        } catch (e: NumberFormatException) {
-                            resultTV.text = "Ошибка: неверный формат числа"
-                        }
-                    }
-                    else -> {
-                        resultTV.text = "Ошибка: неверный оператор"
-                    }
+                } catch (e: NumberFormatException) {
+                    resultTV.text = "Ошибка: неверный формат числа"
                 }
+            } else {
+                resultTV.text = "Ошибка: некорректное выражение"
             }
         }
 
         resBTN.setOnClickListener {
             inputET.text.clear()
-            resultTV.setText(getString(R.string.result))
+            resultTV.setText(R.string.result)
         }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
     }
 
     @SuppressLint("SetTextI18n")
@@ -176,30 +141,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getFirstPart(input: String): String {
-        // Регулярное выражение для поиска части строки до первого символа (*, /, +, -)
-        val regex = Regex("^(.*?)([*/\\+\\-])")
-        messeg(regex.matchEntire(input)?.groups?.get(1)?.value?.trim() ?: "")
-        return regex.matchEntire(input)?.groups?.get(1)?.value?.trim() ?: ""
+        val operator = getOperator(input)
+        val operatorIndex = input.indexOf(operator)
+        return if (operatorIndex != -1) {
+            input.substring(0, operatorIndex).trim()
+        } else {
+            ""
+        }
     }
 
     fun getSecondPart(input: String): String {
-        // Регулярное выражение для поиска части строки от символа (*, /, +, -) до символа (=)
-        val regex = Regex("([*/\\+\\-])(.*?)(=)")
-        messeg(regex.matchEntire(input)?.groups?.get(2)?.value?.trim() ?: "")
-        return regex.matchEntire(input)?.groups?.get(2)?.value?.trim() ?: ""
+        val operator = getOperator(input)
+        val operatorIndex = input.indexOf(operator)
+        val equalIndex = input.indexOf('=')
+        if (operatorIndex != -1) {
+            val endIndex = if (equalIndex != -1) equalIndex else input.length
+            return input.substring(operatorIndex + 1, endIndex).trim()
+        }
+        return ""
     }
 
     fun getOperator(input: String): String {
-        // Регулярное выражение для поиска оператора между числами
-        val regex = Regex("([*/\\+\\-])")
-        messeg(regex.find(input)?.value ?: "")
-        return regex.find(input)?.value ?: ""
+        val operatorRegex = Regex("[*/\\+\\-]")
+        return operatorRegex.find(input)?.value ?: ""
     }
 
     fun messeg(string: String) {
         Toast.makeText(
             applicationContext,
-            "${getString(R.string.string)}",
+            string,
             Toast.LENGTH_LONG
         ).show()
     }
