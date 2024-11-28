@@ -3,6 +3,7 @@ package com.example.calculator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.GridLayout
@@ -64,6 +65,9 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbarTB)
         toolbarTB.setNavigationIcon(R.drawable.exit_fill)
+        toolbarTB.setNavigationOnClickListener {
+            finish()
+        }
 
 
         oneBTN.setOnClickListener { setFigure("1") }
@@ -124,6 +128,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {R.id.exit -> finishAffinity() }  // выйти из приложения
+        return super.onOptionsItemSelected(item)
     }
 
     @SuppressLint("SetTextI18n")

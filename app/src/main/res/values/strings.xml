@@ -3,4 +3,5 @@
     <string name="result">Result</string>
     <string name="string">строка: </string>
     <string name="exit">выход</string>
+    <string name="calculator">Калькулятор</string>
 </resources>

@@ -11,9 +11,9 @@
         android:id="@+id/toolbarMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Калькулятор"
-        app:titleTextColor="@color/white"
+        android:title="@string/calculator"
         android:background="@color/toolbar_background"
+        app:titleTextColor="@color/white"
         tools:ignore="MissingConstraints"/>
 
     <EditText
