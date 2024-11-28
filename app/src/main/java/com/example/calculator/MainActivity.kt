@@ -64,10 +64,9 @@ class MainActivity : AppCompatActivity() {
         resBTN = findViewById(R.id.resBTN)
 
         setSupportActionBar(toolbarTB)
-        toolbarTB.setNavigationIcon(R.drawable.exit_fill)
-        toolbarTB.setNavigationOnClickListener {
-            finish()
-        }
+
+        //toolbarTB.setNavigationIcon(R.drawable.exit_fill)
+
 
 
         oneBTN.setOnClickListener { setFigure("1") }
