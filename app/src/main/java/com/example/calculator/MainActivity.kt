@@ -81,16 +81,27 @@ class MainActivity : AppCompatActivity() {
         eightBTN = findViewById(R.id.eightBTN)
         nineBTN = findViewById(R.id.nineBTN)
         zeroBTN = findViewById(R.id.zeroBTN)
+        aBTN = findViewById(R.id.aBTN)
+        bBTN = findViewById(R.id.bBTN)
+        cBTN = findViewById(R.id.cBTN)
+        dBTN = findViewById(R.id.dBTN)
+        eBTN = findViewById(R.id.eBTN)
+        fBTN = findViewById(R.id.fBTN)
+
         divBTN = findViewById(R.id.divBTN)
         mulBTN = findViewById(R.id.mulBTN)
         subBTN = findViewById(R.id.subBTN)
         sumBTN = findViewById(R.id.sumBTN)
+        dotBTN = findViewById(R.id.dotBTN)
+
         equBTN = findViewById(R.id.equBTN)
         resBTN = findViewById(R.id.resBTN)
+
         binTV = findViewById(R.id.binTV)
         decTV = findViewById(R.id.decTV)
         octTV = findViewById(R.id.octTV)
         hexTV = findViewById(R.id.hexTV)
+
         binSC = findViewById(R.id.binSC)
         decSC = findViewById(R.id.decSC)
         octSC = findViewById(R.id.octSC)
